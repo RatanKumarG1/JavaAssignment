@@ -40,16 +40,34 @@ public class JavaGraph {
     }
 
     static List<Integer> prev;
-
+    
+    public static List<Integer> findSource(Graph graph){
+    	List<Integer> list = new ArrayList<>();
+    	for (int outerIndex = 0; outerIndex < graph.V; outerIndex++) {
+    		boolean found = false;
+    		for (int innerIndex = 0; innerIndex < graph.V; innerIndex++) {
+        		if(outerIndex != innerIndex && graph.adjListArray[innerIndex].indexOf(outerIndex) != -1){
+        			found = true;
+        			break;
+        		}
+        	}
+    		if(found == false){
+    			list.add(outerIndex);
+    		}
+    	}
+		return list;
+    	
+    }
+    
     /**
      * 
      * @param graph 
      */
     static void printGraph(Graph graph) {
-        for (int v = 0; v < graph.V; v++) {
-
+    	List<Integer> sourcesList = findSource(graph);    	
+        for (int v = 0; v < sourcesList.size(); v++) {
             prev = new ArrayList<>();
-            printAdjList(v, graph);
+            printAdjList(sourcesList.get(v), graph);
         }
     }
 
@@ -65,9 +83,11 @@ public class JavaGraph {
                 for (int i : prev) {
                     System.out.print(i + " --> ");
                 }
-                System.out.print(pCrawl);
-                System.out.println("\n");
+                System.out.println(pCrawl);
             }
+        }
+        if (graph.adjListArray[index].size() == 0) {
+        	System.out.println(index);
         }
     }
 
